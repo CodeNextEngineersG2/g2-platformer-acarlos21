@@ -180,7 +180,7 @@ function createCollectable(x, y) {
 // function calls executeLoss(). If a monster falls off the screen, it is
 // removed from the game.
 function applyGravity() {
-  player.velocity.y = GRAVITY;
+  player.velocity.y += GRAVITY;
 }
 
 // Called in the draw() function. Continuously checks for collisions and overlaps
@@ -227,14 +227,16 @@ function checkIdle() {
   if(!keyIsDown(LEFT_ARROW) || !keyIsDown(RIGHT_ARROW)){
     player.velocity.x = 0;
     player.changeAnimation("idle");
-    
+
   }
 }
 
 // Check if the player is falling. If she is not grounded and her y velocity is
 // greater than 0, then set her animation to "fall".
 function checkFalling() {
-
+  if(!playerGrounded  && player.velocity.y > 0){
+    player.changeAnimation("fall");
+  }
 }
 
 // Check if the player is jumping. First, if her y velocity is less than 0, set
@@ -242,7 +244,11 @@ function checkFalling() {
 // key, which should allow her to jump higher so long as currentJumpTime is greater
 // than 0.
 function checkJumping() {
-
+  if(keyIsDown(UP_ARROW) && playerGrounded){
+    player.changeAnimation("jump");
+    player.velocity.y = -5;
+    //keyPressed();
+  }
 }
 
 // Check if the player is moving left or right. If so, move the player character
@@ -266,7 +272,12 @@ function checkMovingLeftRight() {
 // this should initiate the jump sequence, which can be extended by holding down
 // the up arrow key (see checkJumping() above).
 function keyPressed() {
-
+  if(keyIsDown(UP_ARROW) && playerGrounded){
+    playerGrounded = false;
+    player.velocity.y = currentJumpForce;
+    millis = new Date();
+    console.log("i am stuck here. Send Help :/")
+  }
 }
 
 // Check if the player has released the up arrow key. If the player's y velocity
