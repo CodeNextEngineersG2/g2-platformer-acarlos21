@@ -114,6 +114,25 @@ function buildLevel() {
   createCollectable(300, 340);
   createMonster(500, 600, -1);
   createMonster(500,600,1);
+  createPlatform(50, 690, 5);
+ createCollectable(300, 340);
+ createMonster(500, 600, -2);
+ createCollectable(700, 440);
+
+ createPlatform(850, 645, 3);
+ createMonster(1085, 530, 0);
+ createCollectable(1085, 320);
+ createCollectable(1300, 420);
+
+ createPlatform(1450, 595, 4);
+ createCollectable(1600, 320);
+ createMonster(1730, 470, 0);
+ createCollectable(1730, 240);
+ createMonster(1860, 470, 0);
+
+ createPlatform(2050, 470, 2);
+ goal = createSprite(2115, 360);
+  goal.addImage(goalImage);
 }
 
 // Creates a player sprite and adds animations and a collider to it
@@ -186,7 +205,9 @@ function applyGravity() {
   if(player.previousPosition.y !== player.position.y){
     playerGrounded = false;
   }
-
+  if(player.position.y >= height){
+    executeLoss();
+  }
   for(var i = 0; i < monsters.length; i++){
     monsters[i].velocity.y += GRAVITY;
     if(monsters[i].position.y >= height){
@@ -203,6 +224,7 @@ function checkCollisions() {
   monsters.collide(platforms, platformCollision);
   player.collide(monsters, playerMonsterCollision);
   player.overlap(collectables, getCollectable);
+  player.overlap(goal, executeWin);
 }
 
 // Callback function that runs when the player or a monster collides with a
@@ -377,7 +399,8 @@ function updateDisplay() {
 // Anything can happen here, but the most important thing is that we call resetGame()
 // after a short delay.
 function executeWin() {
-
+  noLoop();
+  setTimeout(resetGame, 1000);
 }
 
 // Called when the player has lost the game (e.g., fallen off a cliff or touched
