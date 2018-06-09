@@ -8,9 +8,10 @@ var platformImageFirst, platformImageMiddle, platformImageLast;
 
 // Player Variables
 var player; //p5.play sprite
-var playerIdleAnimation, playerRunAnimation, playerJumpAnimation, playerFallAnimation;
+var playerIdleAnimation, playerRunAnimation, playerJumpAnimation, playerFallAnimation, playerDeadAnimation;
 var playerGrounded; // boolean
 var playerStartX, playerStartY;
+
 
 // Monster Variables
 var monsters; // p5.play sprite group
@@ -48,7 +49,7 @@ window.addEventListener("keydown", function(e) {
 
 function preload() {
   // load background image
-  backgroundImage = loadImage("assets/img/backgrounds/BG.png");
+  backgroundImage = loadImage("assets/img/backgrounds/BG.jpg");
 
   // load platform images
   platformImageFirst = loadImage("assets/img/tiles/Tile (14).png");
@@ -56,17 +57,18 @@ function preload() {
   platformImageLast = loadImage("assets/img/tiles/Tile (16).png");
 
   // load player animations
-  playerIdleAnimation = loadAnimation("assets/img/kunoichi/Idle__000.png", "assets/img/kunoichi/Idle__009.png");
-  playerRunAnimation = loadAnimation("assets/img/kunoichi/Run__000.png", "assets/img/kunoichi/Run__009.png");
-  playerJumpAnimation = loadAnimation("assets/img/kunoichi/Jump__004.png");
-  playerFallAnimation = loadAnimation("assets/img/kunoichi/Jump__009.png");
+  playerIdleAnimation = loadAnimation("assets/img/shinobi/Idle__000.png", "assets/img/shinobi/Idle__009.png");
+  playerRunAnimation = loadAnimation("assets/img/shinobi/Run__000.png", "assets/img/shinobi/Run__009.png");
+  playerJumpAnimation = loadAnimation("assets/img/shinobi/Jump__004.png");
+  playerFallAnimation = loadAnimation("assets/img/shinobi/Jump__009.png");
+  playerDeadAnimation = loadAnimation("assets/img/shinobi/Dead__000.png","assets/img/shinobi/Dead__009.png");
 
   // load monster animations
   monsterWalkAnimation = loadAnimation("assets/img/monster/frame-1.png", "assets/img/monster/frame-10.png");
   monsterDefeatImage = loadImage("assets/img/monster/defeat-frame-3.png");
 
   // load other game object images
-  collectableImage = loadImage("assets/img/kunoichi/Kunai.png");
+  collectableImage = loadImage("assets/img/shinobi/Kunai.png");
   goalImage = loadImage("assets/img/objects/Goal.png");
 }
 
@@ -98,6 +100,7 @@ function resetGame() {
   playerGrounded = false;
   score = 0;
   gamePaused = false;
+  isDead = false;
   loop();
 }
 
@@ -258,8 +261,13 @@ function playerMonsterCollision(player, monster) {
  millis = new Date();
  score++;
     }else{
-      executeLoss();
-
+      player.remove();
+      var defeatedPlayer = createSprite(player.position.x, player.position.y, 0, 0);
+      defeatedPlayer.addAnimation("dead", playerDeadAnimation).looping = false;
+      defeatedPlayer.mirrorX(player.mirrorX());
+      defeatedPlayer.scale = 0.25;
+      defeatedPlayer.life = 60;
+      setTimeout(executeLoss, 1000);
   }
 }
 
