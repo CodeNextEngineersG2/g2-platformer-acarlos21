@@ -87,6 +87,7 @@ function draw() {
   updatePlayer();
   updateDisplay();
   drawSprites();
+  
 
 }
 
@@ -146,7 +147,7 @@ function createPlayer() {
   player.addAnimation("jump", playerJumpAnimation).looping = false;
   player.addAnimation("fall", playerFallAnimation).looping = false;
   player.scale = 0.25;
-  player.setCollider("rectangle", 0, 0, 250, 490);
+  player.setCollider("rectangle", 0, 0, 230, 470);
   //player.debug = true;
 }
 
@@ -368,7 +369,7 @@ function keyReleased() {
 // Check if the player has typed the "p" key, which pauses the game. We use
 // keyTyped() for this because it is not case sensitive (whereas keyPressed() is).
 // Therefore, the player can press "P" or "p" and the game will be paused either way.
-function keyTyped() {
+function keyTyped(){
 
 }
 
